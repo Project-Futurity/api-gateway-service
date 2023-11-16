@@ -1,5 +1,8 @@
-package com.alex.futurity.apigateway.security;
+package com.alex.futurity.apigateway.security.filter;
 
+import com.alex.futurity.apigateway.security.AuthorizationHeaderHandler;
+import com.alex.futurity.apigateway.security.JwtService;
+import com.alex.futurity.apigateway.security.RouterValidator;
 import io.jsonwebtoken.ExpiredJwtException;
 import lombok.AllArgsConstructor;
 import org.springframework.cloud.gateway.filter.GatewayFilter;
@@ -12,14 +15,13 @@ import reactor.core.publisher.Mono;
 @Component
 @AllArgsConstructor
 public class JwtFilter implements GatewayFilter {
-    private final RouterValidator validator;
     private final JwtService jwtService;
 
     @Override
     public Mono<Void> filter(ServerWebExchange exchange, GatewayFilterChain chain) {
         ServerHttpRequest request = exchange.getRequest();
 
-        if (validator.isSecured(request)) {
+        if (RouterValidator.isSecured(request)) {
             if (!AuthorizationHeaderHandler.hasAuthorizationHeader(request)) {
                 return AuthorizationHeaderHandler.onError(exchange, "The authorization header is missing");
             }

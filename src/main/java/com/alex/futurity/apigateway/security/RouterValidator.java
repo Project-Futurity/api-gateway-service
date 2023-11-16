@@ -1,19 +1,22 @@
 package com.alex.futurity.apigateway.security;
 
+import lombok.experimental.UtilityClass;
 import org.springframework.http.server.reactive.ServerHttpRequest;
-import org.springframework.stereotype.Component;
 
 import java.util.List;
 
-@Component
+@UtilityClass
 public class RouterValidator {
-    private final List<String> endPoints = List.of(
+    private static final List<String> ENDPOINTS = List.of(
         "user", "project"
     );
 
     public boolean isSecured(ServerHttpRequest request) {
+        return supports(request, ENDPOINTS);
+    }
+    public boolean supports(ServerHttpRequest request, List<String> endpoints) {
         String path = request.getURI().getPath();
 
-        return endPoints.stream().anyMatch(path::contains);
+        return endpoints.stream().anyMatch(path::contains);
     }
 }
