@@ -25,7 +25,7 @@ public class RsaReader {
     @PostConstruct
     private void readPublicKey() {
         try {
-            String privateKeyString = FileReader.readFileToString(jwtProperties.getPublicKeyPath());
+            String privateKeyString = FileReader.readAbsoluteFile(jwtProperties.getPublicKeyPath());
             publicKey = parseKey(privateKeyString);
         } catch (Exception e) {
             String message = "Error parsing private key: " + e.getMessage();

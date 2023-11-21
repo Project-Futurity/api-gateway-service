@@ -2,16 +2,17 @@ package com.alex.futurity.apigateway.util;
 
 import lombok.experimental.UtilityClass;
 import lombok.extern.slf4j.Slf4j;
-import org.springframework.core.io.ClassPathResource;
 
 import java.io.IOException;
+import java.nio.file.Files;
+import java.nio.file.Path;
 
 @Slf4j
 @UtilityClass
 public class FileReader {
-    public static String readFileToString(String path) {
+    public static String readAbsoluteFile(String path) {
         try {
-            byte[] bytes = new ClassPathResource(path).getInputStream().readAllBytes();
+            byte[] bytes = Files.readAllBytes(Path.of(path));
             return new String(bytes);
         } catch (IOException e) {
             throw new IllegalStateException(
